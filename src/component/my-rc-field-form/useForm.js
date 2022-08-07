@@ -4,7 +4,12 @@ class FormStore {
   constructor() {
     this.store = {};
     this.fieldEntetities = [];
+    this.callbacks = {};
   }
+
+  setCallbacks = (callback) => {
+    this.callbacks = { ...callback, ...this.callbacks };
+  };
 
   // 注册实例
   // 注册与取消实例
@@ -46,6 +51,32 @@ class FormStore {
     });
   };
 
+  // 校验
+  validate = () => {
+    let errorArr = [];
+    this.fieldEntetities.forEach((entity) => {
+      const { name, rules, ...rest } = entity.props;
+      const value = this.getFieldValue(name);
+      const rule = rules[0];
+      if (rule && rule.required && !value) {
+        errorArr.push({ [name]: rule.message || '必填项', value });
+      }
+    });
+    return errorArr;
+  };
+  // 提交
+  submit = () => {
+    const { onFinish, onFinishFaild } = this.callbacks;
+    const error = this.validate();
+    if (error.length) {
+      // 不是0的时候代表校验没通过
+      onFinishFaild(error);
+    } else {
+      // 校验通过
+      onFinish(this.getFieldsValue());
+    }
+  };
+
   // 暴露方法
   getForm = () => {
     return {
@@ -53,6 +84,8 @@ class FormStore {
       getFieldsValue: this.getFieldsValue,
       setFieldValue: this.setFieldValue,
       registerEntetities: this.registerEntetities,
+      submit: this.submit,
+      setCallbacks: this.setCallbacks,
     };
   };
 }
