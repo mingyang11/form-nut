@@ -6,6 +6,7 @@ class FormStore {
   }
   //   form中获取某个表单项数据
   getFieldValue = (name) => {
+    console.log(this.store[name], 'name');
     return this.store[name];
   };
   //   form中获取所有表单项数据
@@ -14,6 +15,7 @@ class FormStore {
   };
   //   form中设置表单值
   setFieldsValue = (newStore) => {
+    console.log(newStore, 'newStore');
     this.store = { ...this.store, ...newStore };
   };
   getForm() {

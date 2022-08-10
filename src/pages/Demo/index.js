@@ -3,14 +3,16 @@ import Form, { Field } from '../../component/my-form';
 import Input from '../../component/Input';
 
 function FormNut() {
+  const [form] = Form.useForm();
   return (
-    <Form>
-      <Field>
+    <Form form={form}>
+      <Field name="name">
         <Input />
       </Field>
-      <Field>
+      <Field name="age">
         <Input />
       </Field>
+      <button>submit</button>
     </Form>
   );
 }
